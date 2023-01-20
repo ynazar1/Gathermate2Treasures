@@ -12,4 +12,10 @@ Minimal effort will be put into maintaining
 
 This is english only
 
+# Other
+
+If you use MBB (MiniMap Button Bag) you'll need to modify MBB.lua (around line 112) to exclude 
+
+```	[51] = "GatherMateTreasuresPin", -- Gathermate Treasures ```
+
 
