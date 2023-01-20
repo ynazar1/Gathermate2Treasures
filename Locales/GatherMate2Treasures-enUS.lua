@@ -7,7 +7,7 @@ local debug = false
 debug = true
 --@end-debug@]==]
 
-local L = LibStub("AceLocale-3.0"):NewLocale("GatherMate2", "enUS", true, debug)
+local L = LibStub("AceLocale-3.0"):NewLocale("GatherMate2Treasures", "enUS", true, debug)
 
 -- Options
 L["Add this location to Cartographer_Waypoints"] = true
@@ -214,7 +214,7 @@ L["World Map Icons Clickable"] = true
 L["Wrath of the Lich King"] = true
 
 
-local NL = LibStub("AceLocale-3.0"):NewLocale("GatherMate2Nodes", "enUS", true, debug)
+local NL = LibStub("AceLocale-3.0"):NewLocale("GatherMate2TreasuresNodes", "enUS", true, debug)
 
 -- Nodes
 NL["Abundant Bloodsail Wreckage"] = true

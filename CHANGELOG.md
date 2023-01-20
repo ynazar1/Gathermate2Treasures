@@ -1,7 +1,8 @@
-# GatherMate2
+# GatherMate2Treasures
 
-## [1.48.3](https://github.com/Nevcairiel/GatherMate2/tree/1.48.3) (2022-12-03)
-[Full Changelog](https://github.com/Nevcairiel/GatherMate2/compare/1.48.2...1.48.3) [Previous Releases](https://github.com/Nevcairiel/GatherMate2/releases)
+## [0.99]
 
-- Add Dragonflight Zone filter for import  
-- Slightly increase the size of the tracking circle  
+First pass
+Forked from Gathermate2
+
+

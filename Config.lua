@@ -1,7 +1,7 @@
-local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local Config = GatherMate:NewModule("Config","AceEvent-3.0")
-local Display = GatherMate:GetModule("Display")
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2", false)
+local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("Gathermate2Treasures")
+local Config = GatherMateTreasures:NewModule("Config","AceEvent-3.0")
+local Display = GatherMateTreasures:GetModule("Display")
+local L = LibStub("AceLocale-3.0"):GetLocale("Gathermate2Treasures", false)
 
 -- Databroker support
 local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
@@ -13,9 +13,9 @@ local SaveBindings = SaveBindings or AttemptToSaveBindings
 ]]
 
 -- Setup keybinds (these need to be global strings to show up properly in ESC -> Key Bindings)
-BINDING_HEADER_GatherMate2 = "GatherMate2"
-BINDING_NAME_TOGGLE_GATHERMATE2_MINIMAPICONS = L["Keybind to toggle Minimap Icons"]
-BINDING_NAME_TOGGLE_GATHERMATE2_MAINMAPICONS = L["Keybind to toggle Worldmap Icons"]
+BINDING_HEADER_Gathermate2Treasures = "Gathermate2Treasures"
+BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS = L["Keybind to toggle Minimap Icons"]
+BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS = L["Keybind to toggle Worldmap Icons"]
 
 -- A helper function for keybindings
 local KeybindHelper = {}
@@ -193,25 +193,25 @@ local minimapOptions = {
 			type = "keybinding",
 			width = "full",
 			get = function(info)
-				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS")), ", ")
+				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS")), ", ")
 			end,
 			set = function(info, key)
 				if key == "" then
-					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS"))
+					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS"))
 					for i = 1, #t do
 						SetBinding(t[i])
 					end
 				else
 					local oldAction = GetBindingAction(key)
-					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMate"]
+					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMateTreasures"]
 					if frame then
-						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2_MINIMAPICONS" ) then
+						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS" ) then
 							frame:SetStatusText(KEY_UNBOUND_ERROR:format(GetBindingText(oldAction, "BINDING_NAME_")))
 						else
 							frame:SetStatusText(KEY_BOUND)
 						end
 					end
-					SetBinding(key, "TOGGLE_GATHERMATE2_MINIMAPICONS")
+					SetBinding(key, "TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS")
 				end
 				SaveBindings(GetCurrentBindingSet())
 			end,
@@ -223,25 +223,25 @@ local minimapOptions = {
 			type = "keybinding",
 			width = "full",
 			get = function(info)
-				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MAINMAPICONS")), ", ")
+				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS")), ", ")
 			end,
 			set = function(info, key)
 				if key == "" then
-					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MAINMAPICONS"))
+					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS"))
 					for i = 1, #t do
 						SetBinding(t[i])
 					end
 				else
 					local oldAction = GetBindingAction(key)
-					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMate"]
+					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMateTreasures"]
 					if frame then
-						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2_MAINMAPICONS" ) then
+						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS" ) then
 							frame:SetStatusText(KEY_UNBOUND_ERROR:format(GetBindingText(oldAction, "BINDING_NAME_")))
 						else
 							frame:SetStatusText(KEY_BOUND)
 						end
 					end
-					SetBinding(key, "TOGGLE_GATHERMATE2_MAINMAPICONS")
+					SetBinding(key, "TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS")
 				end
 				SaveBindings(GetCurrentBindingSet())
 			end,
@@ -376,14 +376,14 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	table.wipe(delocalizedZones)
 	if k == "zones" then
-		for index, zoneID in pairs(GatherMate.HBD:GetAllMapIDs()) do
-			local name = GatherMate:MapLocalize(zoneID)
+		for index, zoneID in pairs(GatherMateTreasures.HBD:GetAllMapIDs()) do
+			local name = GatherMateTreasures:MapLocalize(zoneID)
 			new[name] = name
 			delocalizedZones[name] = zoneID
 		end
 	else
-		local expansion = GatherMate.nodeExpansion[k]
-		local map = GatherMate.nodeIDs[k]
+		local expansion = GatherMateTreasures.nodeExpansion[k]
+		local map = GatherMateTreasures.nodeIDs[k]
 		for name in pairs(map) do
 			local idx = #new+1
 			new[idx] = name
@@ -408,7 +408,7 @@ end})
 local ConfigFilterHelper = {}
 function ConfigFilterHelper:SelectAll(info)
 	local db = db.filter[info.arg]
-	local nids = GatherMate.nodeIDs[info.arg]
+	local nids = GatherMateTreasures.nodeIDs[info.arg]
 	for k, v in pairs(nids) do
 		db[v] = true
 	end
@@ -416,7 +416,7 @@ function ConfigFilterHelper:SelectAll(info)
 end
 function ConfigFilterHelper:SelectNone(info)
 	local db = db.filter[info.arg]
-	local nids = GatherMate.nodeIDs[info.arg]
+	local nids = GatherMateTreasures.nodeIDs[info.arg]
 	for k, v in pairs(nids) do
 		db[v] = false
 	end
@@ -425,13 +425,13 @@ end
 function ConfigFilterHelper:SetState(info, nodeIndex, state)
 	local nodeName = sortedFilter[info.arg][nodeIndex]
 	if nodeName:find("^%(%d+%)") then nodeName = nodeName:match("^%(%d+%) (.*)$") end
-	db.filter[info.arg][GatherMate.nodeIDs[info.arg][nodeName]] = state
+	db.filter[info.arg][GatherMateTreasures.nodeIDs[info.arg][nodeName]] = state
 	Config:UpdateConfig()
 end
 function ConfigFilterHelper:GetState(info, nodeIndex)
 	local nodeName = sortedFilter[info.arg][nodeIndex]
 	if nodeName:find("^%(%d+%)") then nodeName = nodeName:match("^%(%d+%) (.*)$") end
-	return db.filter[info.arg][GatherMate.nodeIDs[info.arg][nodeName]]
+	return db.filter[info.arg][GatherMateTreasures.nodeIDs[info.arg][nodeName]]
 end
 
 local ImportHelper = {}
@@ -701,11 +701,11 @@ local maintenanceOptions = {
 			name = L["Cleanup Database"],
 			desc = L["Cleanup your database by removing duplicates. This takes a few moments, be patient."],
 			type = "execute",
-			handler = GatherMate,
+			handler = GatherMateTreasures,
 			func = "CleanupDB",
 			order = 5,
 			width = "full",
-			disabled = function() return GatherMate:IsCleanupRunning() end
+			disabled = function() return GatherMateTreasures:IsCleanupRunning() end
 		},
 		cleanup_range = {
 			order = 10,
@@ -833,7 +833,7 @@ local maintenanceOptions = {
 						if selectedZone and selectedNode ~= 0 then
 							local nodeName = sortedFilter[selectedDatabase][selectedNode]
 							nodeName = denormalizedNames[nodeName]
-							GatherMate:DeleteNodeFromZone(selectedDatabase, GatherMate.nodeIDs[selectedDatabase][nodeName], delocalizedZones[selectedZone])
+							GatherMateTreasures:DeleteNodeFromZone(selectedDatabase, GatherMateTreasures.nodeIDs[selectedDatabase][nodeName], delocalizedZones[selectedZone])
 						end
 					end,
 					disabled = function()
@@ -847,7 +847,7 @@ local maintenanceOptions = {
 			name = L["Delete Entire Database"],
 			type = "group",
 			func = function(info)
-				GatherMate:ClearDB(info.arg)
+				GatherMateTreasures:ClearDB(info.arg)
 			end,
 			args = {
 				desc = {
@@ -1016,7 +1016,7 @@ importOptions.args.GatherMateData = {
 	handler = ImportHelper,
 	disabled = function()
 		local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo("GatherMate2_Data")
-		local enabled = GetAddOnEnableState(UnitName("player"), "GatherMate2_Data") > 0
+		local enabled = GetAddOnEnableState(UnitName("player"), "GatherMate2T_Data") > 0
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
 		return not enabled or (reason ~= nil and reason ~= "DEMAND_LOADED")
@@ -1085,7 +1085,7 @@ importOptions.args.GatherMateData = {
 		loadData = {
 			order = 8,
 			name = L["Import GatherMate2Data"],
-			desc = L["Load GatherMate2Data and import the data to your database."],
+			desc = L["Don't use this. There is no Treasure Data"],
 			type = "execute",
 			func = function()
 				local loaded, reason = LoadAddOn("GatherMate2_Data")
@@ -1151,65 +1151,65 @@ local function findPanel(name, parent)
 	end
 end
 function Config:OnInitialize()
-	db = GatherMate.db.profile
+	db = GatherMateTreasures.db.profile
 
 	self.importHelper = ImportHelper
 
-	acr:RegisterOptionsTable("GatherMate 2", generalOptions)
-	local options = acd:AddToBlizOptions("GatherMate 2", "GatherMate 2")
+	acr:RegisterOptionsTable("GatherMate 2 Treasures", generalOptions)
+	local options = acd:AddToBlizOptions("GatherMate 2 Treasures", "GatherMate 2 Treasures")
 
 	if InterfaceOptionsFrameAddOns then
 		options:HookScript("OnShow", function()
-			local p = findPanel("GatherMate 2")
+			local p = findPanel("GatherMate 2 Treasures")
 			if p and p.element.collapsed then OptionsListButtonToggle_OnClick(p.toggle) end
 		end)
 	end
 
-	acr:RegisterOptionsTable("GM2/Minimap", minimapOptions)
-	acd:AddToBlizOptions("GM2/Minimap", "Minimap", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/Minimap", minimapOptions)
+	acd:AddToBlizOptions("GM2T/Minimap", "Minimap", "GatherMate 2 Treasures")
 
-	acr:RegisterOptionsTable("GM2/Filter", filterOptions)
-	acd:AddToBlizOptions("GM2/Filter", "Filters", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/Filter", filterOptions)
+	acd:AddToBlizOptions("GM2T/Filter", "Filters", "GatherMate 2 Treasures")
 
-	acr:RegisterOptionsTable("GM2/Maintenance", maintenanceOptions)
-	acd:AddToBlizOptions("GM2/Maintenance", "Maintenance", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/Maintenance", maintenanceOptions)
+	acd:AddToBlizOptions("GM2T/Maintenance", "Maintenance", "GatherMate 2 Treasures")
 
-	acr:RegisterOptionsTable("GM2/Import", importOptions)
-	acd:AddToBlizOptions("GM2/Import", "Import", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/Import", importOptions)
+	acd:AddToBlizOptions("GM2T/Import", "Import", "GatherMate 2 Treasures")
 
-	acr:RegisterOptionsTable("GM2/Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(GatherMate2.db))
-	acd:AddToBlizOptions("GM2/Profiles", "Profiles", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(GatherMate2Treasures.db))
+	acd:AddToBlizOptions("GM2T/Profiles", "Profiles", "GatherMate 2 Treasures")
 
-	acr:RegisterOptionsTable("GM2/FAQ", faqOptions)
-	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/FAQ", faqOptions)
+	acd:AddToBlizOptions("GM2T/FAQ", "FAQ", "GatherMate 2 Treasures")
 
 	local function openOptions()
-		InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
+		InterfaceOptionsFrame_OpenToCategory("GatherMate 2 Treasures")
 	end
 
-	SLASH_GatherMate21 = "/gathermate"
-	SlashCmdList.GatherMate2 = openOptions
+	SLASH_GatherMate2T1 = "/gathermatets"
+	SlashCmdList.GatherMate2Treasures = openOptions
 
-	self:RegisterMessage("GatherMate2ConfigChanged")
+	self:RegisterMessage("GatherMate2TreasuresConfigChanged")
 	if DataBroker then
-		local launcher = DataBroker:NewDataObject("GatherMate2", {
+		local launcher = DataBroker:NewDataObject("GatherMate2Treasures", {
 			type = "launcher",
-			icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
+			icon = "Interface\\AddOns\\GatherMate2Treasures\\Artwork\\Icon.tga",
 			OnClick = function(obj, btn)
 				if btn == "RightButton" then
 					return openOptions()
 				elseif IsShiftKeyDown() then
-					GatherMate2.db.profile.showWorldMap = not GatherMate2.db.profile.showWorldMap
+					GatherMate2Treasures.db.profile.showWorldMap = not GatherMate2Treasures.db.profile.showWorldMap
 				else
-					GatherMate2.db.profile.showMinimap = not GatherMate2.db.profile.showMinimap
+					GatherMate2Treasures.db.profile.showMinimap = not GatherMate2Treasures.db.profile.showMinimap
 				end
 				Config:UpdateConfig()
 			end,
 			OnTooltipShow = function(tip)
-				tip:AddLine("GatherMate2", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+				tip:AddLine("GatherMate2Treasures", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 				tip:AddLine(" ")
-				tip:AddDoubleLine(L["Minimap Icons"], GatherMate2.db.profile.showMinimap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
-				tip:AddDoubleLine(L["World Map Icons"], GatherMate2.db.profile.showWorldMap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
+				tip:AddDoubleLine(L["Minimap Icons"], GatherMate2Treasures.db.profile.showMinimap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
+				tip:AddDoubleLine(L["World Map Icons"], GatherMate2Treasures.db.profile.showWorldMap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
 				tip:AddLine(" ")
 				tip:AddLine(L["Click to toggle minimap icons."])
 				tip:AddLine(L["Shift-click to toggle world map icons."])
@@ -1225,11 +1225,11 @@ function Config:OnEnable()
 end
 
 function Config:UpdateConfig()
-	self:SendMessage("GatherMate2ConfigChanged")
+	self:SendMessage("GatherMate2TreasuresConfigChanged")
 end
 
-function Config:GatherMate2ConfigChanged()
-	db = GatherMate.db.profile
+function Config:GatherMate2TreasuresConfigChanged()
+	db = GatherMateTreasures.db.profile
 end
 
 function Config:CheckAutoImport()
@@ -1248,7 +1248,7 @@ function Config:CheckAutoImport()
 					addon:PerformMerge(v.Databases,v.Style,filter)
 					addon:CleanupImportData()
 					imported[k] = true
-					Config:SendMessage("GatherMate2ConfigChanged")
+					Config:SendMessage("GatherMate2TreasuresConfigChanged")
 					v["lastImport"] = dataVersion
 					print(L["Auto import complete for addon "]..k)
 				end
@@ -1265,7 +1265,7 @@ function Config:RegisterImportModule(moduleName, optionsTable)
 end
 -- Allows an external module to insert their aceopttable
 function Config:RegisterModule(moduleName, optionsTable)
-	acr:RegisterOptionsTable("GM2/" .. moduleName, optionsTable)
-	acd:AddToBlizOptions("GM2/" .. moduleName, moduleName, "GatherMate 2")
+	acr:RegisterOptionsTable("GM2T/" .. moduleName, optionsTable)
+	acd:AddToBlizOptions("GM2T/" .. moduleName, moduleName, "GatherMate 2 Treasures")
 end
 

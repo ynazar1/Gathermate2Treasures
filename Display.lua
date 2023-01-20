@@ -1,6 +1,6 @@
-local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local Display = GatherMate:NewModule("Display","AceEvent-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
+local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("GatherMate2Treasures")
+local Display = GatherMateTreasures:NewModule("Display","AceEvent-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Treasures")
 
 -- WoW 10.0 tracking API compat
 local GetNumTrackingTypes = GetNumTrackingTypes or C_Minimap.GetNumTrackingTypes
@@ -92,7 +92,7 @@ end
 	Delete a pin from the DB, then call update to refresh both minimap and world map
 ]]
 local function deletePin(button,pin)
-	GatherMate:RemoveNodeByID(pin.zone, pin.nodeType, pin.coords)
+	GatherMateTreasures:RemoveNodeByID(pin.zone, pin.nodeType, pin.coords)
 	Display:UpdateWorldMap(true)
 	Display:UpdateMiniMap(true)
 end
@@ -139,7 +139,7 @@ end
 local function pinClick(self, button)
 	if button == "RightButton" and self.worldmap then
 		pinClickedOn = self
-		ToggleDropDownMenu(1, nil, GatherMate2_GenericDropDownMenu, self, 0, 0)
+		ToggleDropDownMenu(1, nil, GatherMate2Treasures_GenericDropDownMenu, self, 0, 0)
 	elseif self.worldmap == false then
 		-- This "simulates" clickthru on the minimap to ping the minimap, by roughknight
 		if Minimap:GetObjectType() == "Minimap" then -- This is for SexyMap's HudMap, which reparents to a hud frame that isn't a minimap
@@ -154,7 +154,7 @@ end
 ]]
 local function addTomTomWaypoint(button,pin)
 	if TomTom then
-		local x, y = GatherMate:DecodeLoc(pin.coords)
+		local x, y = GatherMateTreasures:DecodeLoc(pin.coords)
 		TomTom:AddWaypoint(pin.zone, x, y, {
 			title = pin.title,
 			persistent = nil,
@@ -172,7 +172,7 @@ local function generatePinMenu(self,level)
 	if (level == 1) then
 		-- Create the title of the menu
 		info.isTitle      = 1
-		info.text         = L["GatherMate Pin Options"]
+		info.text         = L["GatherMateTreasures Pin Options"]
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
 
@@ -183,7 +183,7 @@ local function generatePinMenu(self,level)
 		for id, pin in pairs(worldmapPins) do
 			if pin:IsMouseOver() and pin.title then
 				info.text = L["Delete"] .. " :" ..pin.title
-				info.icon = nodeTextures[pin.nodeType][GatherMate:GetIDForNode(pin.nodeType, pin.title)]
+				info.icon = nodeTextures[pin.nodeType][GatherMateTreasures:GetIDForNode(pin.nodeType, pin.title)]
 				info.func = deletePin
 				info.arg1 = pin
 				UIDropDownMenu_AddButton(info, level);
@@ -211,9 +211,9 @@ end
 --[[
 	Setup the dropdown menu
 ]]
-local GatherMate2_GenericDropDownMenu = CreateFrame("Frame", "GatherMate2_GenericDropDownMenu")
-GatherMate2_GenericDropDownMenu.displayMode = "MENU"
-GatherMate2_GenericDropDownMenu.initialize = generatePinMenu
+local GatherMate2Treasures_GenericDropDownMenu = CreateFrame("Frame", "GatherMate2Treasures_GenericDropDownMenu")
+GatherMate2Treasures_GenericDropDownMenu.displayMode = "MENU"
+GatherMate2Treasures_GenericDropDownMenu.initialize = generatePinMenu
 local last_update = 0
 local listening = false
 --[[
@@ -221,14 +221,14 @@ local listening = false
 ]]
 local fullInit = false
 function Display:OnEnable()
-	db = GatherMate.db.profile
+	db = GatherMateTreasures.db.profile
 
 	trackingCircle = self.trackingCircle
-	nodeTextures = GatherMate.nodeTextures
+	nodeTextures = GatherMateTreasures.nodeTextures
 	-- Recheck cvars after all addons are loaded.
 	rotateMinimap = GetCVar("rotateMinimap") == "1"
 	if not self.updateFrame then
-		GatherMate.Visible = {}
+		GatherMateTreasures.Visible = {}
 		self.updateFrame = CreateFrame("Frame")
 		self.updateFrame:SetScript("OnUpdate", function(frame, elapsed)
 			last_update = last_update + elapsed
@@ -248,7 +248,7 @@ function Display:OnEnable()
 	self:RegisterEvent("SKILL_LINES_CHANGED")
 	self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateMaps")
-	GatherMate.HBD.RegisterCallback(self, "PlayerZoneChanged")
+	GatherMateTreasures.HBD.RegisterCallback(self, "PlayerZoneChanged")
 	self:SKILL_LINES_CHANGED()
 	self:MINIMAP_UPDATE_TRACKING()
 	self:PlayerZoneChanged()
@@ -260,10 +260,10 @@ end
 function Display:RegisterMapEvents()
 	self:RegisterEvent("MINIMAP_UPDATE_ZOOM", "MinimapZoom")
 	self:RegisterEvent("CVAR_UPDATE", "ChangedVars")
-	self:RegisterMessage("GatherMate2ConfigChanged","ConfigChanged")
-	self:RegisterMessage("GatherMate2NodeAdded", "ScheduleUpdate")
-	self:RegisterMessage("GatherMate2DataImport", "DataUpdate")
-	self:RegisterMessage("GatherMate2Cleanup", "DataUpdate")
+	self:RegisterMessage("GatherMate2TreasuresConfigChanged","ConfigChanged")
+	self:RegisterMessage("GatherMate2TreasuresNodeAdded", "ScheduleUpdate")
+	self:RegisterMessage("GatherMate2TreasuresDataImport", "DataUpdate")
+	self:RegisterMessage("GatherMate2TreasuresCleanup", "DataUpdate")
 	--self:RegisterEvent("ARTIFACT_DIG_SITE_UPDATED","DigsitesChanged")
 	self.updateFrame:Show()
 	listening = true
@@ -273,10 +273,10 @@ function Display:UnregisterMapEvents()
 	self:UnregisterEvent("MINIMAP_UPDATE_ZOOM")
 	self:UnregisterEvent("CVAR_UPDATE")
 	--self:UnregisterEvent("ARTIFACT_DIG_SITE_UPDATED")
-	self:UnregisterMessage("GatherMate2ConfigChanged")
-	self:UnregisterMessage("GatherMate2NodeAdded")
-	self:UnregisterMessage("GatherMate2DataImport")
-	self:UnregisterMessage("GatherMate2Cleanup")
+	self:UnregisterMessage("GatherMate2TreasuresConfigChanged")
+	self:UnregisterMessage("GatherMate2TreasuresNodeAdded")
+	self:UnregisterMessage("GatherMate2TreasuresDataImport")
+	self:UnregisterMessage("GatherMate2TreasuresCleanup")
 	clearpins(worldmapPins)
 	clearpins(minimapPins)
 	self.updateFrame:Hide()
@@ -289,13 +289,13 @@ function Display:OnDisable()
 	self:UnregisterEvent("SKILL_LINES_CHANGED")
 	self:UnregisterEvent("MINIMAP_UPDATE_TRACKING")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	GatherMate.HBD.UnregisterCallback(self, "PlayerZoneChanged")
+	GatherMateTreasures.HBD.UnregisterCallback(self, "PlayerZoneChanged")
 	WorldMapFrame:RemoveDataProvider(Display.WorldMapDataProvider)
 end
 
 function Display:PlayerZoneChanged()
-	local newZone = GatherMate.HBD:GetPlayerZone()
-	if GatherMate.phasing[newZone] then newZone = GatherMate.phasing[newZone] end
+	local newZone = GatherMateTreasures.HBD:GetPlayerZone()
+	if GatherMateTreasures.phasing[newZone] then newZone = GatherMateTreasures.phasing[newZone] end
 	if newZone ~= zone then
 		zone = newZone
 		self:UpdateMiniMap(true)
@@ -354,7 +354,7 @@ local function IsActiveDigSite()
 end
 
 function Display:UpdateVisibility()
-	for k, v in pairs(GatherMate.db_types) do
+	for k, v in pairs(GatherMateTreasures.db_types) do
 		local visible = false
 		local state = db.show[v]
 		if state == "always" then
@@ -367,7 +367,7 @@ function Display:UpdateVisibility()
 				visible = IsActiveDigSite()
 			end
 		end
-		GatherMate.Visible[v] = visible
+		GatherMateTreasures.Visible[v] = visible
 
 		-- For tracking circle
 		visible = false
@@ -408,7 +408,7 @@ function Display:DataUpdate()
 end
 
 function Display:ConfigChanged()
-	db = GatherMate.db.profile
+	db = GatherMateTreasures.db.profile
 	self:UpdateMaps()
 	-- TODO filter prefs
 end
@@ -423,7 +423,7 @@ function Display:getMapPin()
 	end
 	-- create a new pin
 	pinCount = pinCount + 1
-	pin = CreateFrame("Button", "GatherMatePin"..pinCount, Minimap)
+	pin = CreateFrame("Button", "GatherMateTreasuresPin"..pinCount, Minimap)
 	pin:SetFrameLevel(5)
 	pin:EnableMouse(true)
 	pin:SetWidth(16)
@@ -451,7 +451,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 	if not pin then
 		pin = self:getMapPin()
 		pin.coords = coord
-		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
+		pin.title = GatherMateTreasures:GetNameForNode(nodeType, nodeID)
 		pin.zone = zone
 		pin.nodeID = nodeID
 		pin.nodeType = nodeType
@@ -467,8 +467,8 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexture(nodeTextures[nodeType][nodeID])
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
-		pin.x, pin.y = GatherMate:DecodeLoc(coord)
-		pin.x1, pin.y1 = GatherMate.HBD:GetWorldCoordinatesFromZone(pin.x,pin.y,zone)
+		pin.x, pin.y = GatherMateTreasures:DecodeLoc(coord)
+		pin.x1, pin.y1 = GatherMateTreasures.HBD:GetWorldCoordinatesFromZone(pin.x,pin.y,zone)
 		minimapPins[index] = pin
 	end
 	return pin
@@ -594,7 +594,7 @@ function Display:UpdateIconPositions()
 	if minimapPinCount == 0 then return end
 
 	-- get current player position
-	local x, y = GatherMate.HBD:GetPlayerWorldPosition()
+	local x, y = GatherMateTreasures.HBD:GetPlayerWorldPosition()
 
 	-- for rotating minimap support
 	local facing
@@ -651,7 +651,7 @@ function Display:UpdateMiniMap(force)
 	end
 
 	-- get current player position
-	local x, y = GatherMate.HBD:GetPlayerWorldPosition()
+	local x, y = GatherMateTreasures.HBD:GetPlayerWorldPosition()
 
 	-- get data from the API for calculations
 	local zoom = Minimap:GetZoom()
@@ -691,9 +691,9 @@ function Display:UpdateMiniMap(force)
 		minimapFrameLevel = Minimap:GetFrameLevel() + 5
 		mapRadius = C_Minimap.GetViewRadius()
 
-		local x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
+		local x1, y1 = GatherMateTreasures.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
 		if not x1 then
-			x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
+			x1, y1 = GatherMateTreasures.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
 			if not x1 then return end
 		end
 
@@ -707,9 +707,9 @@ function Display:UpdateMiniMap(force)
 			cos = math_cos(facing)
 		end
 		-- iterate the node databases and add the nodes
-		for i,db_type in pairs(GatherMate.db_types) do
-			if GatherMate.Visible[db_type] then
-				for coord, nodeID in GatherMate:FindNearbyNode(zone, x1, y1, db_type, mapRadius*nodeRange) do
+		for i,db_type in pairs(GatherMateTreasures.db_types) do
+			if GatherMateTreasures.Visible[db_type] then
+				for coord, nodeID in GatherMateTreasures:FindNearbyNode(zone, x1, y1, db_type, mapRadius*nodeRange) do
 					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e14) + coord)
 					pin.keep = true
 					self:addMiniPin(pin, force)
@@ -736,7 +736,7 @@ end
 Display.WorldMapDataProvider = CreateFromMixins(MapCanvasDataProviderMixin)
 
 function Display.WorldMapDataProvider:RemoveAllData()
-	self:GetMap():RemoveAllPinsByTemplate("GatherMate2WorldMapPinTemplate")
+	self:GetMap():RemoveAllPinsByTemplate("GatherMate2TreasuresWorldMapPinTemplate")
 	wipe(worldmapPins)
 end
 
@@ -751,13 +751,13 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 	local uiMapID = self:GetMap():GetMapID()
 	if not uiMapID then return end
 
-	if GatherMate.phasing[uiMapID] then uiMapID = GatherMate.phasing[uiMapID] end
+	if GatherMateTreasures.phasing[uiMapID] then uiMapID = GatherMateTreasures.phasing[uiMapID] end
 
 	-- iterate databases and add nodes
-	for i,db_type in pairs(GatherMate.db_types) do
-		if GatherMate.Visible[db_type] then
-			for coord, nodeID in GatherMate:GetNodesForZone(uiMapID, db_type) do
-				local pin = self:GetMap():AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
+	for i,db_type in pairs(GatherMateTreasures.db_types) do
+		if GatherMateTreasures.Visible[db_type] then
+			for coord, nodeID in GatherMateTreasures:GetNodesForZone(uiMapID, db_type) do
+				local pin = self:GetMap():AcquirePin("GatherMate2TreasuresWorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
 				table.insert(worldmapPins, pin)
 			end
 		end
@@ -765,19 +765,19 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 end
 
 --[[ Handy Notes WorldMap Pin ]]--
-GatherMate2WorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin)
+GatherMate2TreasuresWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin)
 
-function GatherMate2WorldMapPinMixin:OnLoad()
+function GatherMate2TreasuresWorldMapPinMixin:OnLoad()
 	self:UseFrameLevelType("PIN_FRAME_LEVEL_AREA_POI")
 	self:SetScalingLimits(1, 1.0, 1.2);
 end
 
-function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, zone)
-	local x,y = GatherMate:DecodeLoc(coord)
+function GatherMate2TreasuresWorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, zone)
+	local x,y = GatherMateTreasures:DecodeLoc(coord)
 	self:SetPosition(x, y)
 
 	self.coords = coord
-	self.title = GatherMate:GetNameForNode(nodeType, nodeID)
+	self.title = GatherMateTreasures:GetNameForNode(nodeType, nodeID)
 	self.zone = zone
 	self.nodeID = nodeID
 	self.nodeType = nodeType
@@ -797,15 +797,15 @@ function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, zone)
 	end
 end
 
-function GatherMate2WorldMapPinMixin:OnMouseEnter()
+function GatherMate2TreasuresWorldMapPinMixin:OnMouseEnter()
 	return showPin(self)
 end
 
-function GatherMate2WorldMapPinMixin:OnMouseLeave()
+function GatherMate2TreasuresWorldMapPinMixin:OnMouseLeave()
 	return hidePin(self)
 end
 
-function GatherMate2WorldMapPinMixin:OnClick(button)
+function GatherMate2TreasuresWorldMapPinMixin:OnClick(button)
 	return pinClick(self, button)
 end
 

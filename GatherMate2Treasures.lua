@@ -4,11 +4,11 @@
 	This mods whole purpose is to be lean, simple and feature complete.
 ]]
 -- Mixin AceEvent
-local GatherMate = LibStub("AceAddon-3.0"):NewAddon("GatherMate2","AceConsole-3.0","AceEvent-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",false)
-_G["GatherMate2"] = GatherMate
+local GatherMateTreasures = LibStub("AceAddon-3.0"):NewAddon("GatherMate2Treasures","AceConsole-3.0","AceEvent-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Treasures",false)
+_G["GatherMate2Treasures"] = GatherMateTreasures
 
-GatherMate.HBD = LibStub("HereBeDragons-2.0")
+GatherMateTreasures.HBD = LibStub("HereBeDragons-2.0")
 local HBDMigrate = LibStub("HereBeDragons-Migrate")
 
 -- locals
@@ -83,31 +83,31 @@ local next = next
 	Setup a few databases, we sub divide namespaces for resetting/importing
 	:OnInitialize() is called at ADDON_LOADED so savedvariables are loaded
 ]]
-function GatherMate:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("GatherMate2DB", defaults, "Default")
+function GatherMateTreasures:OnInitialize()
+	self.db = LibStub("AceDB-3.0"):New("GatherMate2TreasuresDB", defaults, "Default")
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 
 	-- Setup our saved vars, we dont use AceDB, cause it over kills
 	-- These 4 savedvars are global and doesnt need char specific stuff in it
-	GatherMate2HerbDB = GatherMate2HerbDB or {}
-	GatherMate2MineDB = GatherMate2MineDB or {}
-	GatherMate2FishDB = GatherMate2FishDB or {}
-	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
-	GatherMate2GasDB = GatherMate2GasDB or {}
-	GatherMate2ArchaeologyDB = GatherMate2ArchaeologyDB or {}
-	GatherMate2LoggingDB = GatherMate2LoggingDB or {}
+	GatherMate2TreasuresHerbDB = GatherMate2TreasuresHerbDB or {}
+	GatherMate2TreasuresMineDB = GatherMate2TreasuresMineDB or {}
+	GatherMate2TreasuresFishDB = GatherMate2TreasuresFishDB or {}
+	GatherMate2TreasuresTreasureDB = GatherMate2TreasuresTreasureDB or {}
+	GatherMate2TreasuresGasDB = GatherMate2TreasuresGasDB or {}
+	GatherMate2TreasuresArchaeologyDB = GatherMate2TreasuresArchaeologyDB or {}
+	GatherMate2TreasuresLoggingDB = GatherMate2TreasuresLoggingDB or {}
 	self.gmdbs = {}
 	self.db_types = {}
 	gmdbs = self.gmdbs
-	self:RegisterDBType("Herb Gathering", GatherMate2HerbDB)
-	self:RegisterDBType("Mining", GatherMate2MineDB)
-	self:RegisterDBType("Fishing", GatherMate2FishDB)
-	self:RegisterDBType("Treasure", GatherMate2TreasureDB)
-	self:RegisterDBType("Extract Gas", GatherMate2GasDB)
-	self:RegisterDBType("Archaeology", GatherMate2ArchaeologyDB)
-	self:RegisterDBType("Logging", GatherMate2LoggingDB)
+	self:RegisterDBType("Herb Gathering", GatherMate2TreasuresHerbDB)
+	self:RegisterDBType("Mining", GatherMate2TreasuresMineDB)
+	self:RegisterDBType("Fishing", GatherMate2TreasuresFishDB)
+	self:RegisterDBType("Treasure", GatherMate2TreasuresTreasureDB)
+	self:RegisterDBType("Extract Gas", GatherMate2TreasuresGasDB)
+	self:RegisterDBType("Archaeology", GatherMate2TreasuresArchaeologyDB)
+	self:RegisterDBType("Logging", GatherMate2TreasuresLoggingDB)
 	db = self.db.profile
 	filter = db.filter
 	-- depractaion scan
@@ -129,14 +129,14 @@ function GatherMate:OnInitialize()
 	end
 end
 
-function GatherMate:RemoveGarrisonNodes()
+function GatherMateTreasures:RemoveGarrisonNodes()
 	for _, database in pairs({"Herb Gathering", "Mining"}) do
 		gmdbs[database][971] = {}
 		gmdbs[database][976] = {}
 	end
 end
 
-function GatherMate:RemoveDepracatedNodes()
+function GatherMateTreasures:RemoveDepracatedNodes()
 	for database,storage in pairs(self.gmdbs) do
 		for zone,data in pairs(storage) do
 			for coord,value in pairs(data) do
@@ -149,7 +149,7 @@ function GatherMate:RemoveDepracatedNodes()
 	end
 end
 
-function GatherMate:MigrateData80()
+function GatherMateTreasures:MigrateData80()
 	for database,storage in pairs(self.gmdbs) do
 		local migrated_storage = {}
 		for zone,data in pairs(storage) do
@@ -174,22 +174,22 @@ function GatherMate:MigrateData80()
 end
 
 --[[
-	Register a new node DB for usage in GatherMate
+	Register a new node DB for usage in GatherMateTreasures
 ]]
-function GatherMate:RegisterDBType(name, db)
+function GatherMateTreasures:RegisterDBType(name, db)
 	tinsert(self.db_types, name)
 	self.gmdbs[name] = db
 end
 
-function GatherMate:OnProfileChanged(db,name)
+function GatherMateTreasures:OnProfileChanged(db,name)
 	db = self.db.profile
 	filter = db.filter
-	GatherMate:SendMessage("GatherMate2ConfigChanged")
+	GatherMateTreasures:SendMessage("GatherMate2TreasuresConfigChanged")
 end
 --[[
 	create a reverse lookup table for input table (we use it for english names of nodes)
 ]]
-function GatherMate:CreateReversedTable(tbl)
+function GatherMateTreasures:CreateReversedTable(tbl)
 	if reverseTables[tbl] then
 		return reverseTables[tbl]
 	end
@@ -203,19 +203,19 @@ end
 --[[
 	Clearing function
 ]]
-function GatherMate:ClearDB(dbx)
+function GatherMateTreasures:ClearDB(dbx)
 	-- for our own DBs we just discard the table and be happy
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[dbx] then
+	if GatherMateTreasures.db.profile.dbLocks[dbx] then
 		return
 	end
-	if dbx == "Herb Gathering" then	GatherMate2HerbDB = {}; gmdbs[dbx] = GatherMate2HerbDB
-	elseif dbx == "Fishing" then GatherMate2FishDB = {}; gmdbs[dbx] = GatherMate2FishDB
-	elseif dbx == "Mining" then GatherMate2MineDB = {}; gmdbs[dbx] = GatherMate2MineDB
-	elseif dbx == "Treasure" then GatherMate2TreasureDB = {}; gmdbs[dbx] = GatherMate2TreasureDB
-	elseif dbx == "Extract Gas" then GatherMate2GasDB = {}; gmdbs[dbx] = GatherMate2GasDB
-	elseif dbx == "Archaeology" then GatherMate2ArchaeologyDB = {}; gmdbs[dbx] = GatherMate2ArchaeologyDB
-	elseif dbx == "Logging" then GatherMate2LoggingDB = {}; gmdbs[dbx] = GatherMate2LoggingDB
+	if dbx == "Herb Gathering" then	GatherMate2TreasuresHerbDB = {}; gmdbs[dbx] = GatherMate2TreasuresHerbDB
+	elseif dbx == "Fishing" then GatherMate2TreasuresFishDB = {}; gmdbs[dbx] = GatherMate2TreasuresFishDB
+	elseif dbx == "Mining" then GatherMate2TreasuresMineDB = {}; gmdbs[dbx] = GatherMate2TreasuresMineDB
+	elseif dbx == "Treasure" then GatherMate2TreasuresTreasureDB = {}; gmdbs[dbx] = GatherMate2TreasuresTreasureDB
+	elseif dbx == "Extract Gas" then GatherMate2TreasuresGasDB = {}; gmdbs[dbx] = GatherMate2TreasuresGasDB
+	elseif dbx == "Archaeology" then GatherMate2TreasuresArchaeologyDB = {}; gmdbs[dbx] = GatherMate2TreasuresArchaeologyDB
+	elseif dbx == "Logging" then GatherMate2TreasuresLoggingDB = {}; gmdbs[dbx] = GatherMate2TreasuresLoggingDB
 	else -- for custom DBs we dont know the global name, so we clear it old-fashion style
 		local db = gmdbs[dbx]
 		if not db then error("Trying to clear unknown database: "..dbx) end
@@ -228,39 +228,39 @@ end
 --[[
 	Add an item to the DB
 ]]
-function GatherMate:AddNode(zone, x, y, nodeType, name)
+function GatherMateTreasures:AddNode(zone, x, y, nodeType, name)
 	local db = gmdbs[nodeType]
 	if not db then return end
 	local id = self:EncodeLoc(x,y)
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[nodeType] then
+	if GatherMateTreasures.db.profile.dbLocks[nodeType] then
 		return
 	end
 	db[zone] = db[zone] or {}
 	db[zone][id] = self.nodeIDs[nodeType][name]
-	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
+	self:SendMessage("GatherMate2TreasuresNodeAdded", zone, nodeType, id, name)
 end
 
 --[[
 	Add an item to the DB, performing duplicate checks and cleanup
 ]]
-function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
+function GatherMateTreasures:AddNodeChecked(zone, x, y, nodeType, name)
 	local db = gmdbs[nodeType]
 	if not db then return end
 
 	-- get the node id for what we're adding
-	local nid = GatherMate:GetIDForNode(nodeType, name)
+	local nid = GatherMateTreasures:GetIDForNode(nodeType, name)
 	if not nid then return end
 
 	-- cleanup range
-	local range = GatherMate.db.profile.cleanupRange[nodeType]
+	local range = GatherMateTreasures.db.profile.cleanupRange[nodeType]
 
 	-- check for existing nodes
 	local skip = false
 	local rares = self.rareNodes
-	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, nodeType, range, true) do
+	for coord, nodeID in GatherMateTreasures:FindNearbyNode(zone, x, y, nodeType, range, true) do
 		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
-			GatherMate:RemoveNodeByID(zone, nodeType, coord)
+			GatherMateTreasures:RemoveNodeByID(zone, nodeType, coord)
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
 		elseif rares[nid] and rares[nid][nodeID] then
 			skip = true
@@ -268,7 +268,7 @@ function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
 	end
 
 	if not skip then
-		GatherMate:AddNode(zone, x, y, nodeType, name)
+		GatherMateTreasures:AddNode(zone, x, y, nodeType, name)
 	end
 
 	return not skip
@@ -280,21 +280,21 @@ end
 
 	Renamed to InjectNode2/DeleteNode2 to ensure data addon compatibility with 8.0 zone IDs
 ]]
-function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
+function GatherMateTreasures:InjectNode2(zone, coords, nodeType, nodeID)
 	local db = gmdbs[nodeType]
 	if not db then return end
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[nodeType] then
+	if GatherMateTreasures.db.profile.dbLocks[nodeType] then
 		return
 	end
-	if (nodeType == "Mining" or nodeType == "Herb Gathering") and GatherMate.mapBlacklist[zone] then return end
+	if (nodeType == "Mining" or nodeType == "Herb Gathering") and GatherMateTreasures.mapBlacklist[zone] then return end
 	db[zone] = db[zone] or {}
 	db[zone][coords] = nodeID
 end
-function GatherMate:DeleteNode2(zone, coords, nodeType)
+function GatherMateTreasures:DeleteNode2(zone, coords, nodeType)
 	if not gmdbs[nodeType] then return end
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[nodeType] then
+	if GatherMateTreasures.db.profile.dbLocks[nodeType] then
 		return
 	end
 	local db = gmdbs[nodeType][zone]
@@ -334,7 +334,7 @@ do
 		Find all nearby nodes within the radius of the given (x,y) for a nodeType and zone
 		this function returns an iterator
 	]]
-	function GatherMate:FindNearbyNode(zone, x, y, nodeType, radius, ignoreFilter)
+	function GatherMateTreasures:FindNearbyNode(zone, x, y, nodeType, radius, ignoreFilter)
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
 		tbl.data = gmdbs[nodeType][zone] or emptyTbl
@@ -364,7 +364,7 @@ do
 	--[[
 		This function returns an iterator for the given zone and nodeType
 	]]
-	function GatherMate:GetNodesForZone(zone, nodeType, ignoreFilter)
+	function GatherMateTreasures:GetNodesForZone(zone, nodeType, ignoreFilter)
 		local t = gmdbs[nodeType][zone] or emptyTbl
 		if ignoreFilter then
 			return pairs(t)
@@ -380,42 +380,42 @@ end
 --[[
 	Node id function forward and reverse
 ]]
-function GatherMate:GetIDForNode(type, name)
+function GatherMateTreasures:GetIDForNode(type, name)
 	return self.nodeIDs[type][name]
 end
 --[[
 	Get the name for a nodeID
 ]]
-function GatherMate:GetNameForNode(type, nodeID)
+function GatherMateTreasures:GetNameForNode(type, nodeID)
 	return self.reverseNodeIDs[type][nodeID]
 end
 --[[
 	Remove an item from the DB
 ]]
-function GatherMate:RemoveNode(zone, x, y, nodeType)
+function GatherMateTreasures:RemoveNode(zone, x, y, nodeType)
 	if not gmdbs[nodeType] then return end
 	local db = gmdbs[nodeType][zone]
 	local coord = self:EncodeLoc(x,y)
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
-		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
+		self:SendMessage("GatherMate2TreasuresNodeDeleted", zone, nodeType, coord, t)
 	end
 end
 --[[
 	Remove an item from the DB by node ID and type
 ]]
-function GatherMate:RemoveNodeByID(zone, nodeType, coord)
+function GatherMateTreasures:RemoveNodeByID(zone, nodeType, coord)
 	if not gmdbs[nodeType] then return end
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[nodeType] then
+	if GatherMateTreasures.db.profile.dbLocks[nodeType] then
 		return
 	end
 	local db = gmdbs[nodeType][zone]
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
-		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
+		self:SendMessage("GatherMate2TreasuresNodeDeleted", zone, nodeType, coord, t)
 	end
 end
 
@@ -434,23 +434,23 @@ function CleanerUpdateFrame:OnUpdate(elapsed)
 			self:SetScript("OnUpdate",nil)
 			self.running = false
 			self.cleanup = nil
-			GatherMate:Print(L["Cleanup Complete."])
+			GatherMateTreasures:Print(L["Cleanup Complete."])
 		end
 	else
 		self:SetScript("OnUpdate",nil)
 		self.runing = false
 		self.cleanup = nil
-		GatherMate:Print(L["Cleanup Failed."])
+		GatherMateTreasures:Print(L["Cleanup Failed."])
 	end
 end
 
-function GatherMate:IsCleanupRunning()
+function GatherMateTreasures:IsCleanupRunning()
 	return CleanerUpdateFrame.running
 end
 
-function GatherMate:SweepDatabase()
+function GatherMateTreasures:SweepDatabase()
 	local rares = self.rareNodes
-	for v,zone in pairs(GatherMate.HBD:GetAllMapIDs()) do
+	for v,zone in pairs(GatherMateTreasures.HBD:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		coroutine.yield()
 		for profession in pairs(gmdbs) do
@@ -466,15 +466,15 @@ function GatherMate:SweepDatabase()
 		end
 	end
 	self:RemoveDepracatedNodes()
-	self:SendMessage("GatherMate2Cleanup")
+	self:SendMessage("GatherMate2TreasuresCleanup")
 end
 
-function GatherMate:CleanupDB()
+function GatherMateTreasures:CleanupDB()
 	if not CleanerUpdateFrame.running then
-		CleanerUpdateFrame.cleanup = coroutine.create(GatherMate.SweepDatabase)
+		CleanerUpdateFrame.cleanup = coroutine.create(GatherMateTreasures.SweepDatabase)
 		CleanerUpdateFrame:SetScript("OnUpdate",CleanerUpdateFrame.OnUpdate)
 		CleanerUpdateFrame.running = true
-		local status = coroutine.resume(CleanerUpdateFrame.cleanup,GatherMate)
+		local status = coroutine.resume(CleanerUpdateFrame.cleanup,GatherMateTreasures)
 		if not status then
 			CleanerUpdateFrame.running = false
 			CleanerUpdateFrame:SetScript("OnUpdate",nil)
@@ -491,7 +491,7 @@ end
 --[[
 	Function to delete all of a specified node from a specific zone
 ]]
-function GatherMate:DeleteNodeFromZone(nodeType, nodeID, zone)
+function GatherMateTreasures:DeleteNodeFromZone(nodeType, nodeID, zone)
 	if not gmdbs[nodeType] then return end
 	local db = gmdbs[nodeType][zone]
 	if db then
@@ -500,14 +500,14 @@ function GatherMate:DeleteNodeFromZone(nodeType, nodeID, zone)
 				self:RemoveNodeByID(zone, nodeType, coord)
 			end
 		end
-		self:SendMessage("GatherMate2Cleanup")
+		self:SendMessage("GatherMate2TreasuresCleanup")
 	end
 end
 
 --[[
 	Encode location
 ]]
-function GatherMate:EncodeLoc(x, y)
+function GatherMateTreasures:EncodeLoc(x, y)
 	if x > 0.9999 then
 		x = 0.9999
 	end
@@ -520,10 +520,10 @@ end
 --[[
 	Decode location
 ]]
-function GatherMate:DecodeLoc(id)
+function GatherMateTreasures:DecodeLoc(id)
 	return floor(id/1000000)/10000, floor(id % 1000000 / 100)/10000
 end
 
-function GatherMate:MapLocalize(map)
+function GatherMateTreasures:MapLocalize(map)
 	return self.HBD:GetLocalizedMap(map)
 end

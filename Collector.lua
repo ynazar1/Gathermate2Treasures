@@ -1,7 +1,7 @@
-local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local Collector = GatherMate:NewModule("Collector", "AceEvent-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",true)
-local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes")   -- for get the local name of Gas Cloud´s
+local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("GatherMate2Treasures")
+local Collector = GatherMateTreasures:NewModule("Collector", "AceEvent-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Treasures",true)
+local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2TreasuresNodes")   -- for get the local name of Gas Cloud´s
 
 local WoW10 = select(4, GetBuildInfo()) >= 100000
 
@@ -223,7 +223,7 @@ function Collector:SpellStarted(event,unit,target,guid,spellcast)
 			curSpell = spellcast
 			prevSpell = spellcast
 		end
-		local nodeID = GatherMate:GetIDForNode(spells[prevSpell], target)
+		local nodeID = GatherMateTreasures:GetIDForNode(spells[prevSpell], target)
 		if nodeID then -- seem 2.4 has the node name now as the target
 			self:addItem(prevSpell,target)
 			foundTarget = true
@@ -242,31 +242,31 @@ local lastNode = ""
 local lastNodeCoords = 0
 
 function Collector:addItem(skill,what)
-	local x, y, zone = GatherMate.HBD:GetPlayerZonePosition()
+	local x, y, zone = GatherMateTreasures.HBD:GetPlayerZonePosition()
 	if not x or not y then return end -- no valid data
 
 	-- don't collect any data in the garrison, its always the same location and spams the map
 	-- TODO: garrison ids
-	if GatherMate.mapBlacklist[zone] then return end
-	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
+	if GatherMateTreasures.mapBlacklist[zone] then return end
+	if GatherMateTreasures.phasing[zone] then zone = GatherMateTreasures.phasing[zone] end
 
 	local node_type = spells[skill]
 	if not node_type or not what then return end
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[node_type] then return	end
+	if GatherMateTreasures.db.profile.dbLocks[node_type] then return	end
 
 	-- special case for fishing and gas extraction guage the pointing direction
 	if node_type == fishSpell or node_type == gasSpell then
-		local yw, yh = GatherMate.HBD:GetZoneSize(zone)
+		local yw, yh = GatherMateTreasures.HBD:GetZoneSize(zone)
 		if yw == 0 or yh == 0 then return end -- No zone size data
 		x,y = self:GetFloatingNodeLocation(x, y, yw, yh)
 	end
 	-- avoid duplicate readds
-	local foundCoord = GatherMate:EncodeLoc(x, y)
+	local foundCoord = GatherMateTreasures:EncodeLoc(x, y)
 	if foundCoord == lastNodeCoords and what == lastNode then return end
 
 	-- tell the core to add it
-	local added = GatherMate:AddNodeChecked(zone, x, y, node_type, what)
+	local added = GatherMateTreasures:AddNodeChecked(zone, x, y, node_type, what)
 	if added then
 		lastNode = what
 		lastNodeCoords = foundCoord
@@ -294,7 +294,7 @@ function Collector:GetWorldTarget()
 	if foundTarget or not spells[curSpell] then return end
 	if (MinimapCluster:IsMouseOver()) then return end
 	local what = tooltipLeftText1:GetText()
-	local nodeID = GatherMate:GetIDForNode(spells[prevSpell], what)
+	local nodeID = GatherMateTreasures:GetIDForNode(spells[prevSpell], what)
 	if what and prevSpell and what ~= prevSpell and nodeID then
 		self:addItem(prevSpell,what)
 		foundTarget = true

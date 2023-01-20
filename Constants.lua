@@ -4,9 +4,9 @@
 	data shared between Collector and Display also live in GatherMate for sharing like zone_data for sizes, and node ids with reverses for display and comparison
 	Credit to Astrolabe (http://www.gathereraddon.com) for lookup tables used in GatherMate. Astrolabe is licensed LGPL
 ]]
-local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes",true)
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
+local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("GatherMate2Treasures")
+local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2TreasuresNodes",true)
+local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Treasures")
 
 --[[
 	Node Identifiers
@@ -545,19 +545,19 @@ local node_ids = {
 		[NL["Large Timber"]]					= 703,
 	},
 }
-GatherMate.nodeIDs = node_ids
+GatherMateTreasures.nodeIDs = node_ids
 local reverse = {}
 for k,v in pairs(node_ids) do
-	reverse[k] = GatherMate:CreateReversedTable(v)
+	reverse[k] = GatherMateTreasures:CreateReversedTable(v)
 end
-GatherMate.reverseNodeIDs = reverse
+GatherMateTreasures.reverseNodeIDs = reverse
 -- Special fix because "Battered Chest" (502) and "Tattered Chest" (503) both translate to "Ramponierte Truhe" in deDE
-if GetLocale() == "deDE" then GatherMate.reverseNodeIDs["Treasure"][502] = "Ramponierte Truhe" end
+if GetLocale() == "deDE" then GatherMateTreasures.reverseNodeIDs["Treasure"][502] = "Ramponierte Truhe" end
 
 --[[
 	Collector data for rare spawn determination
 ]]
-local Collector = GatherMate:GetModule("Collector")
+local Collector = GatherMateTreasures:GetModule("Collector")
 --[[
 	Rare spawns are formatted as such the rareid = [nodes it replaces]
 ]]
@@ -667,7 +667,7 @@ local rare_spawns = {
 	[1214] = {[1209]=true},
 	[1215] = {[1209]=true},
 }
-GatherMate.rareNodes = rare_spawns
+GatherMateTreasures.rareNodes = rare_spawns
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
 local nodeRemap = {
@@ -678,8 +678,8 @@ Collector.specials = nodeRemap
 --[[
 	Below are Display Module Constants
 ]]
-local Display = GatherMate:GetModule("Display")
-local icon_path = "Interface\\AddOns\\GatherMate2\\Artwork\\"
+local Display = GatherMateTreasures:GetModule("Display")
+local icon_path = "Interface\\AddOns\\GatherMate2Treasures\\Artwork\\"
 Display.trackingCircle = icon_path.."track_circle.tga"
 -- Find xxx spells
 Display:SetTrackingSpell("Mining", 2580)
@@ -1185,7 +1185,7 @@ local node_textures = {
 		[703] = icon_path.."Logging\\timber.tga",
 	},
 }
-GatherMate.nodeTextures = node_textures
+GatherMateTreasures.nodeTextures = node_textures
 
 local CLASSIC = 1
 local BC      = 2
@@ -1444,7 +1444,7 @@ local node_expansion = {
 		[1434] = DF,
 	},
 }
-GatherMate.nodeExpansion = node_expansion
+GatherMateTreasures.nodeExpansion = node_expansion
 
 --[[
 	Minimap scale settings for zoom
@@ -1493,11 +1493,11 @@ Display.minimapShapes = minimap_shapes
 local map_phasing = {
 }
 
-GatherMate.phasing = map_phasing
+GatherMateTreasures.phasing = map_phasing
 
 local map_blacklist = {
 	[582] = true, -- Alliance Garrison
 	[590] = true, -- Horde Garrison
 }
 
-GatherMate.mapBlacklist = map_blacklist
+GatherMateTreasures.mapBlacklist = map_blacklist
