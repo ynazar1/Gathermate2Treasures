@@ -3,9 +3,10 @@
 -- http://www.wowace.com/projects/gathermate2/localization/
 
 local debug = false
---[==[@debug@
+
+--@debug@
 debug = true
---@end-debug@]==]
+--@end-debug@
 
 local L = LibStub("AceLocale-3.0"):NewLocale("GatherMate2Treasures", "enUS", true, debug)
 
