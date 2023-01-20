@@ -1,7 +1,7 @@
-local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("Gathermate2Treasures")
+local GatherMateTreasures = LibStub("AceAddon-3.0"):GetAddon("GatherMate2Treasures")
 local Config = GatherMateTreasures:NewModule("Config","AceEvent-3.0")
 local Display = GatherMateTreasures:GetModule("Display")
-local L = LibStub("AceLocale-3.0"):GetLocale("Gathermate2Treasures", false)
+local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Treasures", false)
 
 -- Databroker support
 local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
@@ -13,7 +13,7 @@ local SaveBindings = SaveBindings or AttemptToSaveBindings
 ]]
 
 -- Setup keybinds (these need to be global strings to show up properly in ESC -> Key Bindings)
-BINDING_HEADER_Gathermate2Treasures = "Gathermate2Treasures"
+BINDING_HEADER_GatherMate2Treasures = "GatherMate2Treasures"
 BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS = L["Keybind to toggle Minimap Icons"]
 BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS = L["Keybind to toggle Worldmap Icons"]
 
@@ -1085,7 +1085,7 @@ importOptions.args.GatherMateData = {
 		loadData = {
 			order = 8,
 			name = L["Import GatherMate2Data"],
-			desc = L["Don't use this. There is no Treasure Data"],
+			desc = L["Load GatherMate2Data and import the data to your database."],
 			type = "execute",
 			func = function()
 				local loaded, reason = LoadAddOn("GatherMate2_Data")
