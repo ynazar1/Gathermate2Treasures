@@ -4,7 +4,7 @@ This is a fork of Gathermate2 focusing only on treasure portions that are not be
 
 This is my low-effort attempt at tracking currently untracked treasure nodes
 
-Use the roginal https://github.com/Nevcairiel/GatherMate2
+Use the origina https://github.com/Nevcairiel/GatherMate2
 
 Minimal effort will be put into maintaining
 
