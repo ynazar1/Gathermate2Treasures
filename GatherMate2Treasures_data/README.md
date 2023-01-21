@@ -2,11 +2,9 @@
 
 This contains data for all the treasures as of 10.0.2 patch.
 
-I will *STRONGLY* encourage to use filtering function and filter out dirt and explorer chests as well as magic-bound chests.
+I will *STRONGLY* encourage to use filtering function and filter out dirt and explorer packs unless you're actively searching for them, they are so densely packed they cover everything else on the map
 
-Some are invisible unless you have the reputation
-
-Dirt and explorer packs are so densely packed they cover everything else on the map
+Magic-bound chests and dirt are also invisible unless you have the reputation, but they do show up on the minimap as a treasure icon... The chests and caches are untracked on the map thus the need for data
 
 # Installation
 
