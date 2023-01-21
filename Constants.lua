@@ -102,9 +102,9 @@ local node_textures = {
 	},
 	["Treasure"] = {
 		-- DF
-		[566] = icon_path.."Treasure\\treasure.tga",
+		[566] = icon_path.."Treasure\\footlocker.tga",
 		[567] = icon_path.."Treasure\\dirt.tga",
-		[568] = icon_path.."Treasure\\treasure.tga",
+		[568] = icon_path.."Treasure\\chest.tga",
 		[569] = icon_path.."Treasure\\treasure.tga",
 		[570] = icon_path.."Treasure\\treasure.tga",
 		[571] = icon_path.."Treasure\\treasure.tga",
@@ -118,7 +118,7 @@ local node_textures = {
 		[579] = icon_path.."Treasure\\treasure.tga",
 		[580] = icon_path.."Treasure\\treasure.tga",
 		[581] = icon_path.."Treasure\\treasure.tga",
-		[58] = icon_path.."Treasure\\treasure.tga",
+		[582] = icon_path.."Treasure\\treasure.tga",
 	},
 	["Archaeology"] = {
 	},
