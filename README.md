@@ -1,16 +1,16 @@
 # Gathermate2Treasures
 
-This is a fork of Gathermate2 focusing only on treasure portions that are not being tracked by the original
+This is a fork of Gathermate2 focusing only on Dragonflight treasures portion that are not being tracked by the original
 
 This is my low-effort attempt at tracking currently untracked treasure nodes
 
-Use the origina https://github.com/Nevcairiel/GatherMate2
+Use the original https://github.com/Nevcairiel/GatherMate2
 
 Minimal effort will be put into maintaining
 
 # Localization (Translation of Nodes)
 
-This is english only
+This is English only
 
 # Other
 
@@ -18,4 +18,4 @@ If you use MBB (MiniMap Button Bag) you'll need to modify MBB.lua (around line 1
 
 ```	[51] = "GatherMateTreasuresPin", -- Gathermate Treasures ```
 
-
+I've included the data for treasures in the included folder, there are bare-bone instructions on how to 'import' it if you want to
