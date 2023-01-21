@@ -14,8 +14,8 @@ local SaveBindings = SaveBindings or AttemptToSaveBindings
 
 -- Setup keybinds (these need to be global strings to show up properly in ESC -> Key Bindings)
 BINDING_HEADER_GatherMate2Treasures = "GatherMate2Treasures"
-BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS = L["Keybind to toggle Minimap Icons"]
-BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS = L["Keybind to toggle Worldmap Icons"]
+BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MINIMAPICONS = L["GMTS: Keybind to toggle Minimap Icons"]
+BINDING_NAME_TOGGLE_GATHERMATE2TREASURES_MAINMAPICONS = L["GMTS: Keybind to toggle Worldmap Icons"]
 
 -- A helper function for keybindings
 local KeybindHelper = {}
@@ -1187,8 +1187,8 @@ function Config:OnInitialize()
 		InterfaceOptionsFrame_OpenToCategory("GatherMate 2 Treasures")
 	end
 
-	SLASH_GatherMate2T1 = "/gathermatets"
-	SlashCmdList.GatherMate2Treasures = openOptions
+	SLASH_GatherMate2Treasures1 = "/gathermatets"
+	SlashCmdList["GatherMate2Treasures"] = openOptions
 
 	self:RegisterMessage("GatherMate2TreasuresConfigChanged")
 	if DataBroker then
