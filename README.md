@@ -4,13 +4,13 @@ This is a fork of Gathermate2 focusing only on Dragonflight treasures portion th
 
 This is my low-effort attempt at tracking currently untracked treasure nodes
 
-Use the original https://github.com/Nevcairiel/GatherMate2
+Use the original https://github.com/Nevcairiel/GatherMate2 for all other tracking
 
 Minimal effort will be put into maintaining
 
 # Localization (Translation of Nodes)
 
-This is English only
+This is English only and will likely break in other locales due to missing localization files. 
 
 # Other
 
