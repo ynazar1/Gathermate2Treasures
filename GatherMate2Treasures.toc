@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: Gathermate2Treasures
 ## Notes: Collects Treasure locations and adds them to the worldmap and minimap
 ## Author: ynazar1
