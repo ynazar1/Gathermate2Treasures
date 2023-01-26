@@ -23,4 +23,4 @@ I've included the data for treasures in the included folder, there are bare-bone
 
 Idea Credit:
 
-Inspired by @dillan-prince
+Inspired by https://github.com/Nevcairiel/GatherMate2/pull/18 
