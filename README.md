@@ -19,3 +19,8 @@ If you use MBB (MiniMap Button Bag) you'll need to modify MBB.lua (around line 1
 ```	[51] = "GatherMateTreasuresPin", -- Gathermate Treasures ```
 
 I've included the data for treasures in the included folder, there are bare-bone instructions on how to 'import' it if you want to
+
+
+Idea Credit:
+
+Inspired by @dillan-prince
