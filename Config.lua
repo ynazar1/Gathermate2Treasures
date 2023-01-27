@@ -188,8 +188,8 @@ local minimapOptions = {
 		},
 		togglekey = {
 			order = 5,
-			name = L["Keybind to toggle Minimap Icons"],
-			desc = L["Keybind to toggle Minimap Icons"],
+			name = L["GMTS: Keybind to toggle Minimap Icons"],
+			desc = L["GMTS: Keybind to toggle Minimap Icons"],
 			type = "keybinding",
 			width = "full",
 			get = function(info)
@@ -218,8 +218,8 @@ local minimapOptions = {
 		},
 		toggleWkey = {
 			order = 6,
-			name = L["Keybind to toggle Worldmap Icons"],
-			desc = L["Keybind to toggle Worldmap Icons"],
+			name = L["GMTS: Keybind to toggle Worldmap Icons"],
+			desc = L["GMTS: Keybind to toggle Worldmap Icons"],
 			type = "keybinding",
 			width = "full",
 			get = function(info)
