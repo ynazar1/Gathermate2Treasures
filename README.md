@@ -15,7 +15,7 @@ This is English only and will likely break in other locales due to missing local
 # Other
 
 * I've included the data for treasures in the ```GatherMate2Treasures_data``` folder, there are bare-bone instructions on how to 'import' it in that folder
-
+* To figure out object ID's for different treasures... Start with https://www.wowhead.com/objects/shared-containers?filter=17;10;0 
 * If you use MBB (MiniMap Button Bag) you'll need to modify MBB.lua (around line 112) to show minimap nodes 
   + ```	[51] = "GatherMateTreasuresPin", -- Gathermate Treasures ```
 
