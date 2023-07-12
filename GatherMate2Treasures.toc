@@ -1,15 +1,16 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: Gathermate2Treasures
 ## Notes: Collects Treasure locations and adds them to the worldmap and minimap
 ## Author: ynazar1
 ## X-Credits: OttoDeFe for the launher icon.
 ## SavedVariables: GatherMate2TreasuresDB, GatherMate2TreasuresHerbDB, GatherMate2TreasuresMineDB, GatherMate2TreasuresFishDB, GatherMate2TreasuresGasDB, GatherMate2TreasuresTreasureDB, GatherMate2TreasuresArchaeologyDB, GatherMate2TreasuresLoggingDB
 ## X-Category: Map
-## Version: 1.0.0-10
+## Version: 1.0.0-105
 ## X-License: ARR
 ## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
+## IconTexture: Interface\AddOns\GatherMate2Treasures\Artwork\Treasure\chest.tga
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua
