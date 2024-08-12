@@ -1,11 +1,11 @@
-## Interface: 100105
+## Interface: 100207, 110000, 110002
 ## Title: Gathermate2Treasures
 ## Notes: Collects Treasure locations and adds them to the worldmap and minimap
 ## Author: ynazar1
 ## X-Credits: OttoDeFe for the launher icon.
 ## SavedVariables: GatherMate2TreasuresDB, GatherMate2TreasuresHerbDB, GatherMate2TreasuresMineDB, GatherMate2TreasuresFishDB, GatherMate2TreasuresGasDB, GatherMate2TreasuresTreasureDB, GatherMate2TreasuresArchaeologyDB, GatherMate2TreasuresLoggingDB
 ## X-Category: Map
-## Version: 1.0.0-105
+## Version: 1.0.1-1102
 ## X-License: ARR
 ## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons
 ## LoadManagers: AddonLoader
