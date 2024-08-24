@@ -1007,6 +1007,7 @@ ImportHelper.expac_data = {
 	["BFA"] = L["Battle for Azeroth"],
 	["SL"] = L["Shadowlands"],
 	["DF"] = L["Dragonflight"],
+	["TWW"] = L["The War Within"],
 }
 imported["GatherMate2_Data"] = false
 importOptions.args.GatherMateData = {
@@ -1015,7 +1016,8 @@ importOptions.args.GatherMateData = {
 	handler = ImportHelper,
 	disabled = function()
 		local name, title, notes, loadable, reason, security, newVersion = C_AddOns.GetAddOnInfo("GatherMate2_Data")
-		local enabled = C_AddOns.GetAddOnEnableState("GatherMate2T_Data", UnitName("player")) > 0
+		-- Intentionally Broken unless i create my own addon 
+		local enabled = C_AddOns.GetAddOnEnableState("GatherMate2T_Data", UnitName("player")) > 0  
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
 		return not enabled or (reason ~= nil and reason ~= "" and reason ~= "DEMAND_LOADED")
@@ -1241,7 +1243,7 @@ function Config:CheckAutoImport()
 		if verline and v["autoImport"] then
 			local dataVersion = tonumber(verline:match("%d+"))
 			if dataVersion and dataVersion > v["lastImport"] then
-				local loaded, reason = LoadAddOn(k)
+				local loaded, reason = C_AddOns.LoadAddOn(k)
 				if loaded then
 					local addon = LibStub("AceAddon-3.0"):GetAddon(k)
 					local filter = nil

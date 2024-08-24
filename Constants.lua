@@ -137,6 +137,7 @@ local LEGION  = 7
 local BFA     = 8
 local SL      = 9
 local DF      = 10
+local TWW     = 11
 local node_expansion = {
 	["Mining"] = {
 	},
